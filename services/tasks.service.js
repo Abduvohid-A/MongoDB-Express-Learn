@@ -1,4 +1,5 @@
 import Task from "../models/tasks.models.js";
+import User from "../models/users.models.js";
 
 
 export const findAllTasks = async () => {
@@ -6,72 +7,174 @@ export const findAllTasks = async () => {
         const results = await Task.find();
 
         if (results.length === 0) {
-            return { ok: false, values, message: "Tasks Not Found", status: 404 }
+            return { 
+                ok: false, 
+                values: "", 
+                message: "Tasks Not Found", 
+                status: 404 
+            };
         };
-        return { ok: true, values: results, message: "Successful", status: 200 };
+        return { 
+            ok: true, 
+            values: results, 
+            message: "Successful", 
+            status: 200 
+        };
 
     } catch (error) {
         console.log(error);
-        return { ok: false, values, message: error.message, status: 500 }
+
+        return { 
+            ok: false, 
+            values: "", 
+            message: error.message, 
+            status: 500 
+        };
     };
 };
 
 export const findTask = async (id) => {
     try {
         const results = await Task.find({_id : id});
+
         if (!results) {
-            return { ok: false, values, message: "Tasks Not Found", status: 404 }
+            return { 
+                ok: false, 
+                values: "", 
+                message: "Tasks Not Found", 
+                status: 404 
+            };
         };
-        return { ok: true, values: results, message: "Successful", status: 200 };
+
+        return { 
+            ok: true, 
+            values: results, 
+            message: "Successful", 
+            status: 200 
+        };
 
     } catch (error) {
         console.log(error);
-        return { ok: false, values, message: error.message, status: 500 }
+
+        return { 
+            ok: false, 
+            values: "", 
+            message: error.message, 
+            status: 500 
+        };
     };
 };
 
 export const updateTask = async (id, task) => {
     try {
         const results = await Task.findOne({ _id : id});
+
         if (!results) {
-            return { ok: false, values, message: "Tasks Not Found", status: 404 }
+            return { 
+                ok: false, 
+                values: "", 
+                message: "Tasks Not Found", 
+                status: 404 
+            };
         };
+
         const updTask = await Task.findByIdAndUpdate(id, task);
-        return { ok: true, values: updTask, message: "Successful", status: 200 };
+
+        return { 
+            ok: true, 
+            values: updTask, 
+            message: "Successful", 
+            status: 200 
+        };
 
     } catch (error) {
         console.log(error);
-        return { ok: false, values, message: error.message, status: 500 }
+
+        return { 
+            ok: false, 
+            values: "", 
+            message: error.message, 
+            status: 500 
+        };
     };
 };
 
 export const deleteTask = async (id) => {
     try {
         const results = await Task.findOne({ _id : id });
+
         if (!results) {
-            return { ok: false, values, message: "Tasks Not Found", status: 404 }
+            return { 
+                ok: false, 
+                values: "", 
+                message: "Tasks Not Found", 
+                status: 404 
+            };
         };
+
         await Task.findByIdAndDelete(id);
-        return { ok: true, values, message: "Successful Deleted", status: 200 };
+
+        return { 
+            ok: true, 
+            values: "", 
+            message: "Successful Deleted", 
+            status: 200 
+        };
 
     } catch (error) {
         console.log(error);
-        return { ok: false, values, message: error.message, status: 500 }
+
+        return { 
+            ok: false, 
+            values: "", 
+            message: error.message, 
+            status: 500 
+        };
     };
 };
 
 export const taskCreate = async (newTask) => {
     try {
-        const taskExist = await Task.findOne(newTask);
-        if (taskExist) {
-            return { ok: false, values, message: "Task already exist", status: 400 }
+        const { userId, title } = newTask;
+
+        const existUser = await User.findOne({ _id: userId });
+
+        if (!existUser) {
+            return {
+                ok: false,
+                values: "",
+                message: "User is not Found",
+                status: 404
+            };
         };
+
+        const taskExist = await Task.findOne({ userId, title });
+
+        if (taskExist) {
+            return {
+                ok: false,
+                values: "",
+                message: "Task already exist",
+                status: 400
+            };
+        };
+
         const taskData = new Task(newTask);
         const saveTask = await taskData.save();
-        return { ok: true, values: saveTask, message: "Successful created", status: 201};
 
+        return {
+            ok: true,
+            values: saveTask,
+            message: "Muvaffaqiyatli yaratildi",
+            status: 201
+        };
     } catch (error) {
         console.log(error);
-        return { ok: false, values, message: error.message, status: 500 }
-    };
+        return {
+            ok: false,
+            values: "",
+            message: error.message,
+            status: 500
+        };
+    }
 };
