@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { getAllTasks, getTask,
+import {
+    getAllTasks, getTask,
     putTask, delTask, createTask
 } from "../controllers/tasks.controller.js";
 

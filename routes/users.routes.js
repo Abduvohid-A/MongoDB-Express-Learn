@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { getAllUsers, getUser,
+import {
+    getAllUsers, getUser,
     putUser, delUser, createUser
 } from "../controllers/user.controller.js";
 

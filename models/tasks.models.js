@@ -1,22 +1,19 @@
 import mongoose from "mongoose";
 const { Schema, model} = mongoose;
 
-const usersSxhema = new Schema({
-    name: {
+const tasksSxhema = new Schema({
+    title: {
         type: String,
         requird: true 
     },
-    email: {
+    description: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
-    password: {
-        type: String,
-        required: true,
-        min: 5,
-        max: 15
+    userId: {
+        type : Schema.Types.ObjectId,
+        ref : "users"
     }
 });
 
-export default model("users", usersSxhema);
+export default model("tasks", tasksSxhema);
